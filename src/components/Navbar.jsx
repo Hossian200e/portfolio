@@ -1,27 +1,35 @@
+import { useState } from "react";
+import "../assets/pages/Navbar.css";
+
 const Navbar = () => {
+  const [darkMode, setDarkMode] = useState(false);
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+    document.body.classList.toggle("dark-mode", !darkMode);
+  };
+
   return (
-    <nav style={styles.nav}>
-      <h2>Md Hossain</h2>
-      <div>
-        <a href="#home">Home</a>
-        <a href="#about">About</a>
-        <a href="#skills">Skills</a>
-        <a href="#projects">Projects</a>
-        <a href="#contact">Contact</a>
+    <nav className={`navbar ${darkMode ? "dark" : ""}`}>
+      <div className="navbar-container">
+        <h2 className="logo">Hossain</h2>
+        <ul className="nav-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#achievements">Achievements</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li>
+            <button onClick={toggleDarkMode} className="dark-toggle">
+              {darkMode ? "☀️" : "🌙"}
+            </button>
+          </li>
+        </ul>
       </div>
     </nav>
   );
-};
-
-const styles = {
-  nav: {
-    display: "flex",
-    justifyContent: "space-between",
-    padding: "20px",
-    background: "#020617",
-    position: "sticky",
-    top: 0,
-  },
 };
 
 export default Navbar;
