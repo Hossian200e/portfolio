@@ -15,6 +15,19 @@ const Navbar = () => {
   const toggleDarkMode = () => setDarkMode((prev) => !prev);
   const toggleMenu = () => setMenuOpen((prev) => !prev);
 
+  // ✅ Smooth scroll with offset (fix overlap)
+  const handleScroll = (id) => {
+    const element = document.getElementById(id);
+    const offset = 70; // navbar height
+
+    if (element) {
+      const y =
+        element.getBoundingClientRect().top + window.pageYOffset - offset;
+
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+  };
+
   return (
     <>
       <style>{`
@@ -22,6 +35,7 @@ const Navbar = () => {
           margin: 0;
           font-family: 'Inter', sans-serif;
           transition: 0.3s;
+          scroll-behavior: smooth;
         }
 
         body.dark-mode {
@@ -48,7 +62,7 @@ const Navbar = () => {
         .navbar-container {
           max-width: 1200px;
           margin: auto;
-          padding: 14px 20px;
+          padding: 1px 2px;
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -72,10 +86,10 @@ const Navbar = () => {
           color: inherit;
           font-size: 15px;
           position: relative;
-          transition: 0.3s;
+          cursor: pointer;
         }
 
-        /* Active link underline animation */
+        /* Active underline */
         .nav-links a::after {
           content: "";
           position: absolute;
@@ -92,6 +106,7 @@ const Navbar = () => {
           width: 100%;
         }
 
+        /* Toggle Button */
         .dark-toggle {
           background: none;
           border: none;
@@ -124,7 +139,6 @@ const Navbar = () => {
           transition: 0.3s;
         }
 
-        /* Animate to X */
         .hamburger.active span:nth-child(1) {
           transform: rotate(45deg) translateY(8px);
         }
@@ -170,7 +184,7 @@ const Navbar = () => {
 
       <nav className={`navbar ${darkMode ? "dark" : ""}`}>
         <div className="navbar-container">
-          
+
           <h2 className="logo">Hossain</h2>
 
           {/* Hamburger */}
@@ -188,11 +202,11 @@ const Navbar = () => {
             {["home","about","experience","skills","projects","achievements","contact"].map((item) => (
               <li key={item}>
                 <a
-                  href={`#${item}`}
                   className={active === item ? "active" : ""}
                   onClick={() => {
                     setActive(item);
                     setMenuOpen(false);
+                    handleScroll(item); // ✅ FIXED SCROLL
                   }}
                 >
                   {item.charAt(0).toUpperCase() + item.slice(1)}
@@ -203,12 +217,23 @@ const Navbar = () => {
             <li>
               <button onClick={toggleDarkMode} className="dark-toggle">
                 {darkMode ? (
+                  // ☀️ Sun icon
                   <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2">
                     <circle cx="12" cy="12" r="5"/>
+                    <line x1="12" y1="1" x2="12" y2="3"/>
+                    <line x1="12" y1="21" x2="12" y2="23"/>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                    <line x1="1" y1="12" x2="3" y2="12"/>
+                    <line x1="21" y1="12" x2="23" y2="12"/>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
                   </svg>
                 ) : (
+                  // 🌙 Moon icon
                   <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3"/>
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 
+                             7 7 0 0 0 21 12.79z"/>
                   </svg>
                 )}
               </button>
